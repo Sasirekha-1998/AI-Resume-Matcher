@@ -14,8 +14,8 @@ import java.util.*;
 @Service
 public class ResumeService {
 
-    @Autowired
-    OpenAiService openAiService;
+   // @Autowired
+   // OpenAiService openAiService;
     @Autowired
     private SkillAiService skillAiService;
 
