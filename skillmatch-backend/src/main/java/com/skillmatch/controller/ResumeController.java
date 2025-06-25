@@ -5,6 +5,7 @@ import dto.JobDescriptionDto;
 import dto.SkillMatchingResultDto;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,7 @@ public class ResumeController {
     @PostMapping(value = "/resume/upload", consumes = "multipart/form-data")
     public ResponseEntity<String> uploadResume(@RequestParam("file") MultipartFile file) {
         String extractedText = resumeService.extractTextFromResume(file);
-        return ResponseEntity.ok("File uploaded successfully!");
+        return ResponseEntity.ok(extractedText);
     }
 
     @PostMapping("/job/description")
@@ -40,9 +41,18 @@ public class ResumeController {
         return ResponseEntity.ok("Job description saved successfully.");
     }
 
-    @GetMapping("/analysis")
-    public ResponseEntity<SkillMatchingResultDto> analyzeResume() {
-        SkillMatchingResultDto result = resumeService.compareResumeWithJob();
+//    @GetMapping("/analysis")
+//    public ResponseEntity<SkillMatchingResultDto> analyzeResume() {
+//        SkillMatchingResultDto result = resumeService.compareResumeWithJob();
+//        return ResponseEntity.ok(result);
+//    }
+
+    @PostMapping(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SkillMatchingResultDto> analyzeResume(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("description") String jobDescription
+    ) {
+        SkillMatchingResultDto result = resumeService.compareResumeWithJob(file, jobDescription);
         return ResponseEntity.ok(result);
     }
 }

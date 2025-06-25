@@ -89,15 +89,18 @@ public class ResumeService {
     }
 
 
-    public SkillMatchingResultDto compareResumeWithJob() {
+    public SkillMatchingResultDto compareResumeWithJob(MultipartFile resumeFile, String jobDescription) {
         try {
             log.info("Called compareResumeWithJob");
+            String resumeText = extractTextFromResume(resumeFile);
             String aiResponse = skillAiService.analyzeSkills(resumeText, jobDescription);
             return new ObjectMapper().readValue(aiResponse, SkillMatchingResultDto.class);
         } catch (Exception e) {
             return fallbackKeywordMatching();
         }
     }
+
+
 
 
 }
